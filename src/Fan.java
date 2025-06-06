@@ -72,7 +72,12 @@ public class Fan implements Runnable {
                 int baseX = 300; // ponto mais à direita da fila
                 int espacamentoX = 70;
                 int x = baseX - indice * espacamentoX;
-                setPosicao(x, 400);
+                int yi = 400;
+                if(indice > 4){
+                    yi = 500;
+                    x += 350;
+                }
+                setPosicao(x, yi);
                 break;
 
             case "assistindo":
@@ -81,8 +86,13 @@ public class Fan implements Runnable {
                 break;
 
             case "comendo":
-                int y = 100 + indice * 70;
-                setPosicao(1000, y);
+                int y = 200 + indice * 70;
+                int xi = 1000;
+                if(indice > 4){
+                    y -= 350;
+                    xi = 1100;
+                }
+                setPosicao(xi, y);
                 break;
         }
     }
