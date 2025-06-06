@@ -81,8 +81,13 @@ public class Fan implements Runnable {
                 break;
 
             case "assistindo":
-                Point pos = painelCinema.getPosicaoCadeira(indice);
-                setPosicao(pos.x, pos.y);
+                //Point pos = painelCinema.getPosicaoCadeira(indice);
+                //setPosicao(pos.x, pos.y);
+                try {
+                    moverParaCadeira();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case "comendo":
@@ -96,6 +101,48 @@ public class Fan implements Runnable {
                 break;
         }
     }
+
+    private void moverParaCadeira() throws InterruptedException {
+    if (painelCinema == null) return;
+
+    int indice = painelCinema.getIndiceFan(this);
+    Point destino = painelCinema.getPosicaoCadeira(indice);
+
+    // Etapa 1: Ir até x = 500 (mesma linha atual)
+    while (x < 500) {
+        x += 5;
+        setPosicao(x, y);
+        Thread.sleep(10);
+    }
+
+    // Etapa 2: Ir até o Y do destino
+    while (y < destino.y) {
+        y += 5;
+        setPosicao(x, y);
+        Thread.sleep(10);
+    }
+    while (y > destino.y) { // caso o destino esteja acima
+        y -= 5;
+        setPosicao(x, y);
+        Thread.sleep(10);
+    }
+
+    // Etapa 3: Finalizar movimento no eixo X até destino.x
+    while (x < destino.x) {
+        x += 5;
+        setPosicao(x, y);
+        Thread.sleep(10);
+    }
+    while (x > destino.x) {
+        x -= 5;
+        setPosicao(x, y);
+        Thread.sleep(10);
+    }
+
+    // Garante posição final precisa
+    setPosicao(destino.x, destino.y);
+}
+
 
     public void setPainelCinema(PainelCinema painelCinema) {
         this.painelCinema = painelCinema;
