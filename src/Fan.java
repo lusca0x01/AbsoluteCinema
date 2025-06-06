@@ -46,9 +46,17 @@ public class Fan implements Runnable {
 
                 setPosicaoPorEstado("esperando");
                 System.out.printf("[Fã %s] Esperando a próxima sessão...%n", id);
-                cinema.canWatch.acquire();
-
+                cinema.moveToChair.acquire();
                 setPosicaoPorEstado("assistindo");
+
+                System.out.printf("[Fã %s] Sentado...%n", id);
+
+                if (cinema.seatedCount.incrementAndGet() == cinema.capacity) {
+                    cinema.allSeated.release(); // Libera o demonstrador ao atingir a capacidade da sessão
+                }
+
+                cinema.startMovie.acquire();
+
                 System.out.printf("[Fã %s] Assistindo o filme...%n", id);
                 CPUBound.run(cinema.endOfMovie);
 

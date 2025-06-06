@@ -7,9 +7,12 @@ public class Cinema {
     private PainelCinema painelCinema;
    
     public final Semaphore mutex = new Semaphore(1); // Mutex para a zona crítica da var waiting
-    public final Semaphore canWatch = new Semaphore(0); // Semafóro para alertar o início do filme
+    public final Semaphore moveToChair = new Semaphore(0); // Semáforo para sinalizar a ida para a cadeira
+    public final Semaphore startMovie = new Semaphore(0); // Semafóro para alertar o início do filme
+    public final Semaphore allSeated = new Semaphore(0); // Semáforo para sinalizar o demonstrador para começar o filme
     public final Semaphore endOfMovie = new Semaphore(0); // Semáforo para alertar o fim do filme
     public final AtomicInteger waiting = new AtomicInteger(0); // Inteiro que representa a fila de espera
+    public final AtomicInteger seatedCount  = new AtomicInteger(0); // Contador de fãs sentados
 
     public Cinema(int capacity, int movieTimeSeconds) {
         this.capacity = capacity;

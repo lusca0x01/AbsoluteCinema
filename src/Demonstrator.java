@@ -14,15 +14,22 @@ public class Demonstrator implements Runnable {
                     continue;
                 }
 
-                System.out.println("[Demonstrador] Filme começou!");
-
                 for (int i = 0; i < cinema.capacity; i++) {
-                    cinema.canWatch.release(); // Libera o filme pras threads fãs
+                    cinema.moveToChair.release(); // Libera o filme pras threads fãs
                 }
 
                 cinema.mutex.acquire(); // Entra na zona crítica para operar a variável waiting
                 cinema.waiting.addAndGet(-cinema.capacity); // Remove a galera da fila de espera
                 cinema.mutex.release(); // Sai da zona crítica
+
+                cinema.allSeated.acquire();
+                cinema.seatedCount.set(0);
+
+                System.out.println("[Demonstrador] Filme começou!");
+
+                for (int i = 0; i < cinema.capacity; i++) {
+                    cinema.startMovie.release();
+                }
 
                 CPUBound.run(cinema.movieTimeSeconds); // Começa o CPU bound com o tempo da sessão
 
