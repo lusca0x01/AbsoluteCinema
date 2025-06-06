@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PainelCinema extends JPanel {
@@ -12,8 +13,11 @@ public class PainelCinema extends JPanel {
 
     private final Map<Integer, Point> posicoesCadeiras = new HashMap<>();
 
-    public PainelCinema(String caminhoImagem) {
-        this.background = new ImageIcon(caminhoImagem).getImage();
+    public PainelCinema() {
+        // Carrega a imagem a partir do classpath (pasta src/data)
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/data/BACKGROUND.png")));
+        this.background = icon.getImage();
+
         this.fans = new CopyOnWriteArrayList<>();
 
         posicoesCadeiras.put(0, new Point(550, 520));

@@ -26,7 +26,7 @@ public class Main {
         frame.setLayout(new BorderLayout());
 
         // Painel da imagem central com slots para os fas
-        painelCinema = new PainelCinema("../data/BACKGROUND.png");
+        painelCinema = new PainelCinema();
         frame.add(painelCinema, BorderLayout.CENTER);
 
         // Painel de formulario

@@ -1,4 +1,5 @@
 import java.awt.*;
+import javax.swing.*;
 
 public class Fan implements Runnable {
     private final String id;
@@ -8,14 +9,16 @@ public class Fan implements Runnable {
 
     private int x, y; // posição atual do fã
     private final String pathImagem;
-    private Image imagem;
+    private final Image imagem;
 
     public Fan(String id, int tl, Cinema cinema) {
         this.id = id;
         this.tl = tl;
         this.cinema = cinema;
-        this.pathImagem = "../data/AG1.png"; //ajeitar esse path 
-        this.imagem = Toolkit.getDefaultToolkit().getImage(pathImagem);
+        this.pathImagem = "/data/AG1.png";
+
+        // Carrega a imagem a partir do classpath corretamente
+        this.imagem = new ImageIcon(getClass().getResource(pathImagem)).getImage();
 
         this.x = 100;
         this.y = 400;
@@ -29,10 +32,8 @@ public class Fan implements Runnable {
         this.x = x;
         this.y = y;
         if (painelCinema != null) {
-            //painelCinema.atualizarPosicaoFan(id, getPosicaoNome(x));
             painelCinema.repaint();
         }
-
     }
 
     @Override
@@ -44,7 +45,6 @@ public class Fan implements Runnable {
                 cinema.mutex.release();
 
                 setPosicaoPorEstado("esperando");
-
                 System.out.printf("[Fã %s] Esperando a próxima sessão...%n", id);
                 cinema.canWatch.acquire();
 
@@ -73,7 +73,7 @@ public class Fan implements Runnable {
                 int espacamentoX = 70;
                 int x = baseX - indice * espacamentoX;
                 int yi = 400;
-                if(indice > 4){
+                if (indice > 4) {
                     yi = 500;
                     x += 350;
                 }
@@ -88,7 +88,7 @@ public class Fan implements Runnable {
             case "comendo":
                 int y = 200 + indice * 70;
                 int xi = 1000;
-                if(indice > 4){
+                if (indice > 4) {
                     y -= 350;
                     xi = 1100;
                 }
@@ -97,9 +97,7 @@ public class Fan implements Runnable {
         }
     }
 
-
     public void setPainelCinema(PainelCinema painelCinema) {
         this.painelCinema = painelCinema;
     }
-
 }
