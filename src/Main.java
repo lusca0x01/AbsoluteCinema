@@ -35,7 +35,7 @@ public class Main {
         painelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelFormulario.setPreferredSize(new Dimension(250, 0));
 
-        JLabel idLabel = new JLabel("ID do fa:");
+        JLabel idLabel = new JLabel("Nome do fa:");
         JTextField idField = new JTextField(1);
 
         JLabel tempoLabel = new JLabel("Tempo lanche (s):");

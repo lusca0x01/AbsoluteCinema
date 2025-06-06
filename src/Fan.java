@@ -26,6 +26,16 @@ public class Fan implements Runnable {
 
     public void desenhar(Graphics g) {
         g.drawImage(imagem, x, y, 64, 64, null);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 12));
+
+        FontMetrics fm = g.getFontMetrics();
+        int textoLargura = fm.stringWidth(id);
+        int textoX = x + (64 - textoLargura) / 2;
+        int textoY = y - 5;
+
+        g.drawString(id, textoX, textoY);
     }
 
     public void setPosicao(int x, int y) {
@@ -116,26 +126,23 @@ public class Fan implements Runnable {
     int indice = painelCinema.getIndiceFan(this);
     Point destino = painelCinema.getPosicaoCadeira(indice);
 
-    // Etapa 1: Ir até x = 500 (mesma linha atual)
     while (x < 500) {
         x += 5;
         setPosicao(x, y);
         Thread.sleep(10);
     }
 
-    // Etapa 2: Ir até o Y do destino
     while (y < destino.y) {
         y += 5;
         setPosicao(x, y);
         Thread.sleep(10);
     }
-    while (y > destino.y) { // caso o destino esteja acima
+    while (y > destino.y) { 
         y -= 5;
         setPosicao(x, y);
         Thread.sleep(10);
     }
 
-    // Etapa 3: Finalizar movimento no eixo X até destino.x
     while (x < destino.x) {
         x += 5;
         setPosicao(x, y);
@@ -147,7 +154,6 @@ public class Fan implements Runnable {
         Thread.sleep(10);
     }
 
-    // Garante posição final precisa
     setPosicao(destino.x, destino.y);
 }
 
