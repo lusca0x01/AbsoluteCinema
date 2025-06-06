@@ -10,6 +10,8 @@ public class PainelCinema extends JPanel {
 
     private final Image background;
     private final List<Fan> fans;
+ 
+
 
     private final Map<Integer, Point> posicoesCadeiras = new HashMap<>();
 

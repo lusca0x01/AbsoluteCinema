@@ -32,7 +32,7 @@ public class Demonstrator implements Runnable {
                 }
 
                 CPUBound.run(cinema.movieTimeSeconds); // Começa o CPU bound com o tempo da sessão
-
+                
                 for (int i = 0; i < cinema.capacity; i++) {
                     cinema.endOfMovie.release();  // Sinaliza o fim do filme pras threads fãs
                 }

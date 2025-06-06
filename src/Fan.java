@@ -99,12 +99,12 @@ public class Fan implements Runnable {
                 break;
 
             case "comendo":
-                int y = 200 + indice * 70;
-                int xi = 1000;
-                if (indice > 4) {
-                    y -= 350;
-                    xi = 1100;
-                }
+                int y = 410 + ((indice % 3 ) * 70);
+                int xi = 1030 + ((indice % 4) * 70);
+                //if (indice > 4) {
+                //    y -= 350;
+                //    xi = 1100;
+                //}
                 setPosicao(xi, y);
                 break;
         }
