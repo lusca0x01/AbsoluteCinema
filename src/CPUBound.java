@@ -4,36 +4,66 @@ public final class CPUBound {
     private CPUBound() {}
 
     public static void run(int seconds, Fan fan) {
-        long end = System.currentTimeMillis() + seconds * 1000L;
+        long startTime = System.currentTimeMillis();
         long dummy = 0;
 
-        while (System.currentTimeMillis() < end) {
-            fan.counter--;
+        fan.counter = seconds * 1000;
+
+        while (true) {
+            long now = System.currentTimeMillis();
+            int elapsedMillis = (int) (now - startTime);
+
+            int remaining = seconds * 1000 - elapsedMillis;
+            fan.counter = Math.max(remaining, 0);
+
+            if (remaining <= 0) break;
+
             for (int i = 0; i < 10_000; i++) {
                 dummy += (long) (Math.sin(dummy + i) + Math.cos(dummy + i));
             }
         }
-
     }
 
     public static void run(int seconds, Demonstrator demo) {
-        long end = System.currentTimeMillis() + seconds * 1000L;
+        long startTime = System.currentTimeMillis();
         long dummy = 0;
 
-        while (System.currentTimeMillis() < end) {
-            demo.counter--;
+        demo.counter = seconds * 1000;
+
+        while (true) {
+            long now = System.currentTimeMillis();
+            int elapsedMillis = (int) (now - startTime);
+
+            int remaining = seconds * 1000 - elapsedMillis;
+            demo.counter = Math.max(remaining, 0);
+
+            if (remaining <= 0) break;
+
             for (int i = 0; i < 10_000; i++) {
                 dummy += (long) (Math.sin(dummy + i) + Math.cos(dummy + i));
             }
         }
-
     }
 
-    public static void run(Semaphore signal) {
+
+    public static void run(Semaphore signal, Fan fan) {
+        long startTime = System.currentTimeMillis();
         long dummy = 0;
 
+        final int totalDurationMs = fan.counter;
+
         try {
-            while (!signal.tryAcquire()) {
+            while (true) {
+                long now = System.currentTimeMillis();
+                int elapsedMillis = (int) (now - startTime);
+                int remaining = totalDurationMs - elapsedMillis;
+
+                fan.counter = Math.max(remaining , 0);
+
+                if (signal.tryAcquire()) {
+                    break;
+                }
+
                 for (int i = 0; i < 10_000; i++) {
                     dummy += (long) (Math.sin(dummy + i) + Math.cos(dummy + i));
                 }

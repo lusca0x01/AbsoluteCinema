@@ -54,7 +54,7 @@ public class Fan implements Runnable {
     public void run() {
         while (true) {
             try {
-                this. counter = 0;
+                counter = cinema.movieTimeSeconds * 1000;
                 cinema.waitForStart.release();
                 setPosicaoPorEstado("esperando");
                 System.out.printf("[Fã %s] Esperando a próxima sessão...%n", id);
@@ -69,7 +69,7 @@ public class Fan implements Runnable {
                 cinema.startMovie.acquire();
 
                 System.out.printf("[Fã %s] Assistindo o filme...%n", id);
-                CPUBound.run(cinema.endOfMovie);
+                CPUBound.run(cinema.endOfMovie, this);
 
                 setPosicaoPorEstado("comendo");
                 System.out.printf("[Fan %s] Indo comer (%ds)...%n", id, tl);
@@ -132,33 +132,28 @@ public class Fan implements Runnable {
         x += 5;
         setPosicao(x, y);
         Thread.sleep(10);
-        counter = counter + 100;
     }
 
     while (y < destino.y) {
         y += 5;
         setPosicao(x, y);
         Thread.sleep(10);
-        counter = counter + 100;
     }
     while (y > destino.y) { 
         y -= 5;
         setPosicao(x, y);
         Thread.sleep(10);
-        counter = counter + 100;
     }
 
     while (x < destino.x) {
         x += 5;
         setPosicao(x, y);
         Thread.sleep(10);
-        counter = counter + 100;
     }
     while (x > destino.x) {
         x -= 5;
         setPosicao(x, y);
         Thread.sleep(10);
-        counter = counter + 100;
     }
 
     setPosicao(destino.x, destino.y);
