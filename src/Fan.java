@@ -11,6 +11,8 @@ public class Fan implements Runnable {
     private final String pathImagem;
     private final Image imagem;
 
+    public int counter;
+
     public Fan(String id, int tl, Cinema cinema) {
         this.id = id;
         this.tl = tl;
@@ -36,6 +38,8 @@ public class Fan implements Runnable {
         int textoY = y - 5;
 
         g.drawString(id, textoX, textoY);
+        String exib = String.valueOf(counter / 1000);
+        g.drawString(exib, textoX, textoY + 10);
     }
 
     public void setPosicao(int x, int y) {
@@ -50,10 +54,11 @@ public class Fan implements Runnable {
     public void run() {
         while (true) {
             try {
+                this. counter = 0;
                 cinema.mutex.acquire();
                 cinema.waiting.incrementAndGet();
                 cinema.mutex.release();
-
+                //this.counter = 0;
                 setPosicaoPorEstado("esperando");
                 System.out.printf("[Fã %s] Esperando a próxima sessão...%n", id);
                 cinema.moveToChair.acquire();
@@ -64,7 +69,6 @@ public class Fan implements Runnable {
                 if (cinema.seatedCount.incrementAndGet() == cinema.capacity) {
                     cinema.allSeated.release(); // Libera o demonstrador ao atingir a capacidade da sessão
                 }
-
                 cinema.startMovie.acquire();
 
                 System.out.printf("[Fã %s] Assistindo o filme...%n", id);
@@ -72,7 +76,8 @@ public class Fan implements Runnable {
 
                 setPosicaoPorEstado("comendo");
                 System.out.printf("[Fan %s] Indo comer (%ds)...%n", id, tl);
-                CPUBound.run(tl);
+                this.counter = tl * 1000;
+                CPUBound.run(tl, this);
             } catch (InterruptedException e) {
                 System.err.printf("Fã %s interrompido %n", id);
                 return;
@@ -130,34 +135,37 @@ public class Fan implements Runnable {
         x += 5;
         setPosicao(x, y);
         Thread.sleep(10);
+        counter = counter + 100;
     }
 
     while (y < destino.y) {
         y += 5;
         setPosicao(x, y);
         Thread.sleep(10);
+        counter = counter + 100;
     }
     while (y > destino.y) { 
         y -= 5;
         setPosicao(x, y);
         Thread.sleep(10);
+        counter = counter + 100;
     }
 
     while (x < destino.x) {
         x += 5;
         setPosicao(x, y);
         Thread.sleep(10);
+        counter = counter + 100;
     }
     while (x > destino.x) {
         x -= 5;
         setPosicao(x, y);
         Thread.sleep(10);
+        counter = counter + 100;
     }
 
     setPosicao(destino.x, destino.y);
 }
-
-
     public void setPainelCinema(PainelCinema painelCinema) {
         this.painelCinema = painelCinema;
     }

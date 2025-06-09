@@ -8,13 +8,15 @@ public class Main {
 
     private static Cinema cinema;
     private static PainelCinema painelCinema;
+    private static Demonstrator demo;
 
     public static void main(String[] args) {
         int capacity = Integer.parseInt(JOptionPane.showInputDialog("Capacidade do cinema:"));
         int showTime = Integer.parseInt(JOptionPane.showInputDialog("Duracao do filme (em segundos):"));
 
         cinema = new Cinema(capacity, showTime);
-        new Thread(new Demonstrator(cinema), "Demonstrator").start();
+        demo = new Demonstrator(cinema);
+        new Thread(demo, "Demonstrator").start();
 
         SwingUtilities.invokeLater(Main::criarJanela);
     }
@@ -26,7 +28,7 @@ public class Main {
         frame.setLayout(new BorderLayout());
 
         // Painel da imagem central com slots para os fas
-        painelCinema = new PainelCinema();
+        painelCinema = new PainelCinema(demo);
         frame.add(painelCinema, BorderLayout.CENTER);
 
         // Painel de formulario

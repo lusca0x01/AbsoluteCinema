@@ -10,12 +10,13 @@ public class PainelCinema extends JPanel {
 
     private final Image background;
     private final List<Fan> fans;
- 
+    private Demonstrator demo;
 
 
     private final Map<Integer, Point> posicoesCadeiras = new HashMap<>();
 
-    public PainelCinema() {
+    public PainelCinema(Demonstrator demonstrator) {
+        this.demo = demonstrator;
         // Carrega a imagem a partir do classpath (pasta src/data)
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/data/BACKGROUND.png")));
         this.background = icon.getImage();
@@ -61,5 +62,7 @@ public class PainelCinema extends JPanel {
         for (Fan fan : fans) {
             fan.desenhar(g);
         }
+        
+        demo.desenhar(g);
     }
 }
