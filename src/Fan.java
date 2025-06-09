@@ -55,10 +55,7 @@ public class Fan implements Runnable {
         while (true) {
             try {
                 this. counter = 0;
-                cinema.mutex.acquire();
-                cinema.waiting.incrementAndGet();
-                cinema.mutex.release();
-                //this.counter = 0;
+                cinema.waitForStart.release();
                 setPosicaoPorEstado("esperando");
                 System.out.printf("[Fã %s] Esperando a próxima sessão...%n", id);
                 cinema.moveToChair.acquire();

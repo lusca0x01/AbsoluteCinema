@@ -23,18 +23,13 @@ public class Demonstrator implements Runnable {
         while (true) {
             try {
                 counter = cinema.movieTimeSeconds * 1000;
-                if (cinema.waiting.get() < cinema.capacity) {
-                    System.out.println("[Demonstrador] Cinema esperando pela audiência...");
-                    continue;
-                }
+                System.out.println("[Demonstrador] Cinema esperando pela audiência...");
+
+                cinema.waitForStart.acquire(cinema.capacity);
 
                 for (int i = 0; i < cinema.capacity; i++) {
                     cinema.moveToChair.release(); // Libera o filme pras threads fãs
                 }
-
-                cinema.mutex.acquire(); // Entra na zona crítica para operar a variável waiting
-                cinema.waiting.addAndGet(-cinema.capacity); // Remove a galera da fila de espera
-                cinema.mutex.release(); // Sai da zona crítica
 
                 cinema.allSeated.acquire();
                 cinema.seatedCount.set(0);
